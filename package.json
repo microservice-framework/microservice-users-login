@@ -1,0 +1,35 @@
+{
+  "name": "@microservice-framework/microservice-users-login",
+  "version": "1.2.0",
+  "description": "Microservice framework auth service.",
+  "main": "microservice-users-login.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --timeout 15000",
+    "start": "DEBUG=http:log,cluster:* node  --max-old-space-size=48 microservice-users-login.js",
+    "stop": "node kill.js",
+    "status": "node status.js",
+    "jscs": "jscs --fix microservice-users-login.js test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microservice-framework/microservice-users-login.git"
+  },
+  "author": "Gormartsen",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/microservice-framework/microservice-users-login/issues"
+  },
+  "dependencies": {
+    "@microservice-framework/microservice": "^1.2.7",
+    "@microservice-framework/microservice-cluster": "^1.2.1",
+    "@microservice-framework/microservice-router-register": "^1.2.10",
+    "debug": "^2.6.3",
+    "dotenv": "^2.0.0"
+  },
+  "devDependencies": {
+    "@microservice-framework/microservice-client": "^1.2.4",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  },
+  "homepage": "https://github.com/microservice-framework/microservice-users-login#readme"
+}

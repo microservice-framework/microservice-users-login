@@ -1,0 +1,16 @@
+{
+  "id": "/Register",
+  "type": "object",
+  "properties": {
+    "login": {
+      "type": "string",
+      "description": "Login name.",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "description": "Password.",
+      "required": true
+    }
+  }
+}
