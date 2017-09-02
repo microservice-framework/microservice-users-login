@@ -135,7 +135,7 @@ function loginValidation(login, password, requestDetails, callback) {
           if (err) {
             return callback(err);
           }
-          if (user.hash != derivedKey.toString('hex')) {
+          if (user.hash.hash != derivedKey.toString('hex')) {
             return callback(new Error('Password mismatch'));
           };
           callback(err);
