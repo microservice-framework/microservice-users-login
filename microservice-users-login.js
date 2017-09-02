@@ -93,7 +93,7 @@ function microserviceUsersLoginVALIDATE(method, jsonData, requestDetails, callba
  */
 function microserviceUsersLoginPOST(jsonData, requestDetails, callback) {
   jsonData.login = jsonData.login.toLowerCase();
-  loginValidation(jsonData.login, jsonData.password, requestDetails, function(err) {
+  loginValidation(jsonData.login, jsonData.password, requestDetails, function(err, user) {
     if (err) {
       return callback(err);
     }
@@ -138,7 +138,7 @@ function loginValidation(login, password, requestDetails, callback) {
           if (user.hash.hash != derivedKey.toString('hex')) {
             return callback(new Error('Password mismatch'));
           };
-          callback(err);
+          callback(err, user);
         }
       );
     });
