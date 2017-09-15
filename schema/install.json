@@ -33,6 +33,16 @@
       "default": 32,
       "required": true
     },
+     "permission_path": {
+      "type": "string",
+      "description": "Path to the folder with permissions by role"
+    },
+    "default_ttl": {
+      "type": "number",
+      "description": "TTl of the token in sec. Default 3600.",
+      "default": 6000,
+      "required": true
+    },
     "hostname": {
       "type": "string",
       "description": "IP or hostname of the server",

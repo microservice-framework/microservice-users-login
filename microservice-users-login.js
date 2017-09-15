@@ -11,6 +11,7 @@ const clientViaRouter = require(framework + '/microservice-router-register').cli
 
 const debugF = require('debug');
 const crypto = require('crypto');
+const fs = require('fs');
 
 var debug = {
   log: debugF('users-login:log'),
@@ -19,6 +20,10 @@ var debug = {
 
 require('dotenv').config();
 
+let permissionsPath = './permissions';
+if (process.env.PERMISSION_PATH) {
+  permissionsPath = process.env.PERMISSION_PATH;
+}
 
 
 var mservice = new Microservice({
@@ -97,8 +102,48 @@ function microserviceUsersLoginPOST(jsonData, requestDetails, callback) {
     if (err) {
       return callback(err);
     }
-    callback(new Error('we have to return new access token here'));
-  })
+    let role = "user";
+    if(user.role) {
+      role = user.role;
+    }
+    let roleJSON;
+    try {
+      roleJSON = JSON.parse(fs.readFileSync(permissionsPath + '/' + role + '.json'));
+    } catch (e) {
+      console.log(e);
+      console.log(permissionsPath + '/' + role + '.json');
+      return callback(new Error('Failed to load role permissions'));
+    }
+    let scopeRequest = {
+      credentials: {
+        username: user.login,
+        role: user.role,
+      },
+      scope: roleJSON
+    }
+    if(process.env.DEFAULT_TTL) {
+      request.ttl = process.env.DEFAULT_TTL;
+    }
+    clientViaRouter('auth', function(err, authServer) {
+      if (err) {
+        return callback(err);
+      }
+      authServer.post(scopeRequest, function(err, answer) {
+        if (err) {
+          debug.debug('authServer.post err %O', err);
+          debug.log('authServer.post failed with error.');
+        }
+        let handlerAnswer = {
+          code: 200,
+          answer: {
+            accessToken: answer.accessToken,
+            expireAt: answer.expireAt
+          }
+        }
+        return callback(err, handlerAnswer);
+      });
+    });
+  });
 }
 
 /**
@@ -110,6 +155,9 @@ function loginValidation(login, password, requestDetails, callback) {
   }
   if (login.length > process.env.LOGIN_MAX_LENGTH) {
     return callback(new Error('Maximum login length is ' + process.env.LOGIN_MAX_LENGTH));
+  }
+  if(!password) {
+    return callback(new Error('No password provided'));
   }
   var searchUser = {
     login: login

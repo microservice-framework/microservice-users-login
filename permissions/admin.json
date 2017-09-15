@@ -1,0 +1,13 @@
+[
+  {
+    "service": "users",
+    "methods": {
+      "get": true,
+      "put": true,
+      "post": true,
+      "delete": true,
+      "search": true,
+      "options": true
+    }
+  }
+]
