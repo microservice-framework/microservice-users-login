@@ -122,7 +122,7 @@ function microserviceUsersLoginPOST(jsonData, requestDetails, callback) {
       scope: roleJSON
     }
     if(process.env.DEFAULT_TTL) {
-      request.ttl = process.env.DEFAULT_TTL;
+      scopeRequest.ttl = parseInt(process.env.DEFAULT_TTL);
     }
     clientViaRouter('auth', function(err, authServer) {
       if (err) {
